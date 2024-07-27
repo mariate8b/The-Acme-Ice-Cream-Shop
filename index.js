@@ -16,6 +16,8 @@ const init = async() => {
     let SQL= `DROP TABLE IF EXISTS The-Acme-Ice-Cream-Shop;
     CREATE TABLE The-Acme-Ice-Cream-Shop(
         id SERIAL PRIMARY KEY,
+        name(STRING)
+        is_favorite(BOOLEAN) 
         txt VARCHAR(255)
         ranking INTEGER DEFAULT 3 NOT NULL,
         created_at TIMESTAMP DEFAULT now(),
@@ -36,20 +38,66 @@ const init = async() => {
     console.log("Seeeded data");
 
     const port = process.env. PORT || 3000
+    server.listen(port, () => {
+        console.log(`listening on port ${port}`)
 
-}
+    })
+
+};
 
 init();
 
 server.use(express.json());
 server.use(require('morgan')("dev"));
 
-server.post('/api/theacmeicecream',(req,res ,next) =>{})
+server.post('/api/flavors', async(req,res ,next) =>{
+    try{
+        const {txt ,ranking}= req.body;
+        const SQL = `INSERT INTO the acme ice cream(txt ,ranking) VALUES(5, 12)RETURNING *;`;
+        const response = await client.query(SQL , [txt,ranking]);
 
-server.get('/api/theacmeicecream',(req,res ,next) =>{});
+        res.status(201) send(response.rows);
+    }catch(error){
+        next(error);
+    }
+   
+});
 
-server.put('/api/theacmeicecream',(req,res ,next) =>{});
+server.get('/api/flavors' ,(req,res ,next) =>{
+    try{
+        const SQL= `SELECT * from the acme ice cream ORDER BY created_at DESC`;
+        const response = await client.query(SQL);
+        res.send(response.rows);
+        
+       }  catch(error){
+        next(err);
 
-server.delete('/api/theacmeicecream',(req,res ,next) =>{});
+        }
+    
+});
+
+server.put('/api/flavors/:id',(req,res ,next) =>{
+    try{
+
+        const {txt , ranking} = req.body;
+        const SQL = `UPDATE the acme ice cream SET txt=5, ranking=5 update_at= now() WHERE id=3 RETURNING `;
+        const response = await client.query(SQL[txt,ranking, req.params.id]);
+        res.send(response.rows[0]);
+    } catch (error){
+        next(error);
+    }
+    
+});
+
+server.delete('/api/flavors/:id',(req,res ,next) =>{
+    try{
+        const SQL =`DELETE FROM the acme ice cream WHERE id=12;`;
+        await client.query(SQL, [req.params.id]);
+        res.sendStatus(204);
+    }catch (error){
+        next(error);
+    }
+    
+});
 
 
