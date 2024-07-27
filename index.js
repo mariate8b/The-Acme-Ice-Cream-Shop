@@ -56,14 +56,14 @@ server.post('/api/flavors', async(req,res ,next) =>{
         const SQL = `INSERT INTO the acme ice cream(txt ,ranking) VALUES(5, 12)RETURNING *;`;
         const response = await client.query(SQL , [txt,ranking]);
 
-        res.status(201) send(response.rows);
+        res.status(201).send(response.rows);
     }catch(error){
         next(error);
     }
    
 });
 
-server.get('/api/flavors' ,(req,res ,next) =>{
+server.get('/api/flavors' , async(req,res ,next) =>{
     try{
         const SQL= `SELECT * from the acme ice cream ORDER BY created_at DESC`;
         const response = await client.query(SQL);
@@ -76,7 +76,7 @@ server.get('/api/flavors' ,(req,res ,next) =>{
     
 });
 
-server.put('/api/flavors/:id',(req,res ,next) =>{
+server.put('/api/flavors/:id',async(req,res ,next) =>{
     try{
 
         const {txt , ranking} = req.body;
@@ -89,7 +89,7 @@ server.put('/api/flavors/:id',(req,res ,next) =>{
     
 });
 
-server.delete('/api/flavors/:id',(req,res ,next) =>{
+server.delete('/api/flavors/:id', async (req,res ,next) =>{
     try{
         const SQL =`DELETE FROM the acme ice cream WHERE id=12;`;
         await client.query(SQL, [req.params.id]);
